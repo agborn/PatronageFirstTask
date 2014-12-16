@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -40,15 +42,18 @@ namespace FirstTask
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
+            
+
             Place = new Place()
             {
+               
                 Name = "Technopark",
                 Address = "Niemierzyńska",
-                Latitude = 160d,
-                Longitude = 13.5d, 
+                //Latitude = 160d,
+                //Longitude = 13.5d, 
                 HasWifi = true
             };
-
+            //Place.geolocation();
             this.DataContext = Place;
         }
 

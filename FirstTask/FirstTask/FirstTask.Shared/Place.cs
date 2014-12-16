@@ -2,11 +2,28 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace FirstTask
 {
     public class Place : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public async void geolocation()
+        {
+            Geolocator geolocator = new Geolocator();
+            geolocator.DesiredAccuracyInMeters = 50;
+
+            Geoposition geoposition = await geolocator.GetGeopositionAsync(
+            maximumAge: TimeSpan.FromMinutes(5),
+            timeout: TimeSpan.FromSeconds(10));
+
+            latitude = geoposition.Coordinate.Latitude;
+            longitude = geoposition.Coordinate.Longitude;
+        }
+
         private string name;
         public string Name
         {
@@ -38,6 +55,7 @@ namespace FirstTask
         {
             get
             {
+                geolocation();
                 return latitude;
             }
             set
@@ -51,6 +69,7 @@ namespace FirstTask
         {
             get
             {
+                geolocation();
                 return longitude;
             }
             set
@@ -76,9 +95,6 @@ namespace FirstTask
         {
             return "{" + Name + "}, {" + Address + "}";
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
 
     }
 }
