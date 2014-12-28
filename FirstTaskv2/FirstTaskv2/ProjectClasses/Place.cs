@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
-namespace FirstTaskv2.classes
+namespace FirstTaskv2.ProjectClasses
 {
     public class Place : INotifyPropertyChanged
     {
+        public string id { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(String info)
@@ -20,7 +22,7 @@ namespace FirstTaskv2.classes
             }
         }
 
-        public async void Geolacation()
+        public async void Geolocation()
         {
             Geolocator geolocator = new Geolocator();
             geolocator.DesiredAccuracyInMeters = 50;

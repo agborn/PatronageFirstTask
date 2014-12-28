@@ -1,4 +1,5 @@
-﻿using FirstTaskv2.classes;
+﻿using FirstTaskv2.ProjectClasses;
+using FirstTaskv2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,35 +25,23 @@ namespace FirstTaskv2
     //private Place place;
     public sealed partial class AddPlacePage : Page
     {
-        private Place place;
-        public Place Place
-        {
-            get
-            {
-                return place;
-            }
-            set
-            {
-                if (value != place)
-                    place = value;
-            }
-        }
+        AddPlacePageViewModel AddPlacePageViewModel;
         public AddPlacePage()
         {
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            Place = new Place()
+            this.DataContext = AddPlacePageViewModel = new AddPlacePageViewModel() 
             {
-                Name = "Technopark",
-                Address = "Niemierzyńska",
-                HasWifi = true
+                Place = new Place()
+                {
+                    Name = "Technopark",
+                    Address = "Niemierzyńska",
+                    HasWifi = true
+                },
+                IsAddButtonEnabled = true
             };
-
-            Place.Geolacation();
-
-            this.DataContext = Place;
         }
 
         /// <summary>
@@ -69,6 +58,11 @@ namespace FirstTaskv2
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AddPlacePageViewModel.EnableAddButton(((TextBox)sender).Text);
         }
     }
 }
