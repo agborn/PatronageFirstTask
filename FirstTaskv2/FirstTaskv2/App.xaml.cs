@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FirstTaskv2.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace FirstTaskv2
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
-
+            
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -71,6 +72,7 @@ namespace FirstTaskv2
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+                new NavigationService().RegisterRootFrame(rootFrame);
             }
 
             if (rootFrame.Content == null)
@@ -91,7 +93,7 @@ namespace FirstTaskv2
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(AddPlacePage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(PlacesListPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }

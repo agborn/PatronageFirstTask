@@ -1,4 +1,4 @@
-﻿using FirstTaskv2.ProjectClasses;
+﻿using FirstTaskv2.Classes;
 using PatronageWP;
 using System;
 using System.Collections.Generic;
@@ -6,12 +6,36 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Phone.UI.Input;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace FirstTaskv2.ViewModels
 {
     public class AddPlacePageViewModel : INotifyPropertyChanged
     {
+        public AddPlacePageViewModel()
+        {
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+        }
+
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Frame frame = Window.Current.Content as Frame;
+            if (frame == null)
+            {
+                return;
+            }
+
+            if (frame.CanGoBack)
+            {
+                Cancel();
+                e.Handled = true;
+            }
+        }
+
+    
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(String info)
@@ -33,12 +57,13 @@ namespace FirstTaskv2.ViewModels
             {
                 place = value;
                 place.Geolocation();
+                //CanEnableAddButton();
                 NotifyPropertyChanged("Place");
             }
         }
 
         PlaceService placeService = new PlaceService();
-
+        private NavigationService NavigationService = new NavigationService();
         private RelayCommand addCommand = null;
         public RelayCommand AddCommand
         {
@@ -46,13 +71,17 @@ namespace FirstTaskv2.ViewModels
             {
                 if (addCommand == null)
                 {
-                    addCommand = new RelayCommand(() =>
-                    {
-                        placeService.AddPlace(Place); Place = new Place();
-                        var messageDialog = new MessageDialog(String.Format("Success. Number of places: {0}.", placeService.GetPlaces().Count));
-                        messageDialog.ShowAsync();
-                    });
-                    
+                    addCommand = new RelayCommand(
+                        () =>
+                        {
+                            placeService.AddPlace(Place); Place = new Place();
+                            NavigationService.Navigate(typeof(PlacesListPage));
+                        }//, 
+                        //() => 
+                        //{
+                         //   return CanEnableAddButton(); 
+                        //}
+                        ); 
                 }
                 return addCommand;
             }
@@ -68,12 +97,7 @@ namespace FirstTaskv2.ViewModels
                     
                     clearCommand = new RelayCommand(() =>
                         {
-                            var messageDialog = new MessageDialog("Do you want to erase your data?");
-                            messageDialog.Commands.Add(new UICommand("Yes", new UICommandInvokedHandler(this.CommandInvokedHandler)));
-                            messageDialog.Commands.Add(new UICommand("No", new UICommandInvokedHandler(this.CommandInvokedHandler)));
-                            messageDialog.DefaultCommandIndex = 0;
-                            messageDialog.CancelCommandIndex = 1;
-                            messageDialog.ShowAsync();
+                            Cancel();
                         });
                     
                 }
@@ -81,27 +105,39 @@ namespace FirstTaskv2.ViewModels
             }
         }
 
-        private void CommandInvokedHandler(IUICommand command)
+        private void Cancel()
         {
-            if (command.Label == "Yes")
-            {
-                Place.Name = String.Empty;
-                Place.Address = String.Empty;
-                Place.Latitude = 0;
-                Place.Longitude = 0;
-                Place.HasWifi = false;
-            }
+            var messageDialog = new MessageDialog("Do you want to cancel?");
+            messageDialog.Commands.Add(new UICommand("Yes", new UICommandInvokedHandler(this.ClearYesCommandInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("No", null));
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            messageDialog.ShowAsync();
         }
 
-        public void EnableAddButton( string Name)
+        private void ClearYesCommandInvokedHandler(IUICommand command)
         {
-            if (Name != String.Empty)
+            NavigationService.Navigate(typeof(PlacesListPage));
+            Place.Name = String.Empty;
+            Place.Address = String.Empty;
+            Place.Geolocation();
+            Place.HasWifi = false;
+            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+        }
+
+        public bool CanEnableAddButton()
+        {
+            if (!string.IsNullOrWhiteSpace(Place.Name))
+            {
                 IsAddButtonEnabled = true;
+                return true;
+            }
             else
                 IsAddButtonEnabled = false;
+            return false;
         }
 
-        private bool isAddButtonEnabled;
+        private bool isAddButtonEnabled = true;
         public bool IsAddButtonEnabled
         {
             get

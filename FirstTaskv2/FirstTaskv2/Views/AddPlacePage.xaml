@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="FirstTaskv2.AddPlacePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FirstTaskv2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	
+    <StackPanel>
+        <TextBox Header="Name" Text="{Binding Place.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <TextBox Header="Address" Text="{Binding Place.Address, Mode=TwoWay}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <TextBox Header="Latitude" Text="{Binding Place.Latitude, Mode=TwoWay}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <TextBox Header="Longitude" Text="{Binding Place.Longitude, Mode=TwoWay}" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <CheckBox IsChecked="{Binding Place.HasWifi, Mode=TwoWay}" Content="Has Wifi" HorizontalAlignment="Stretch" Margin="0,20,0,0"/>
+	</StackPanel>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton IsEnabled="{Binding IsAddButtonEnabled, Mode=TwoWay}" Command="{Binding AddCommand}" Label="Add" Icon="Add"></AppBarButton>
+            <AppBarButton Command="{Binding ClearCommand}" Label="Cancel" Icon="Cancel"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

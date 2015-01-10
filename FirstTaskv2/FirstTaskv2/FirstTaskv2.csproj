@@ -82,15 +82,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProjectClasses\Place.cs" />
-    <Compile Include="AddPlacePage.xaml.cs">
+    <Compile Include="Classes\NavigationService.cs" />
+    <Compile Include="Classes\Place.cs" />
+    <Compile Include="Views\AddPlacePage.xaml.cs">
       <DependentUpon>AddPlacePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProjectClasses\PlaceService.cs" />
-    <Compile Include="PlaceInterfaces\IPlaceService.cs" />
-    <Compile Include="ProjectClasses\RelayCommand.cs" />
+    <Compile Include="Classes\PlaceService.cs" />
+    <Compile Include="Interfaces\INavigationService.cs" />
+    <Compile Include="Interfaces\IPlaceService.cs" />
+    <Compile Include="Classes\RelayCommand.cs" />
+    <Compile Include="Views\PlacesListPage.xaml.cs">
+      <DependentUpon>PlacesListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AddPlacePageViewModel.cs" />
+    <Compile Include="ViewModels\PlacesListPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -110,9 +116,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="AddPlacePage.xaml">
+    <Page Include="Views\AddPlacePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PlacesListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
